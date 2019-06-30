@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/stock")
+@RequestMapping("/stock-service")
 @CrossOrigin(origins = "http://localhost")
 public class StockServiceController {
 
@@ -25,7 +25,7 @@ public class StockServiceController {
         this.stockService = stockService;
     }
 
-    @GetMapping("/{symbol}")
+    @GetMapping("/stocks/{symbol}")
     public ResponseEntity<Stock> findStock(@PathVariable("symbol") final String symbol) {
         Stock stock = new Stock(symbol);
         try {
