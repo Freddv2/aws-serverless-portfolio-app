@@ -1,11 +1,13 @@
 package dv2.portfolioservice.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dv2.portfolioservice.domain.Portfolio;
 import dv2.portfolioservice.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/portfolio-service")
@@ -19,14 +21,23 @@ public class PortfolioController {
         this.portfolioService = portfolioService;
     }
 
+    @PostMapping("/portfolios")
+    public Portfolio createPortfolio(@RequestBody ObjectNode requestBody) {
+        return portfolioService.createPortfolio(requestBody.get("portfolioName").asText());
+    }
+
     @GetMapping("/portfolios")
-    public ResponseEntity<Iterable<Portfolio>> listPortfolios() {
-        Iterable<Portfolio> portfolios = portfolioService.listPortfolios();
-        return new ResponseEntity<>(portfolios, HttpStatus.OK);
+    public Iterable<Portfolio> listPortfolios() {
+        return portfolioService.listPortfolios();
     }
 
     @GetMapping("/portfolios/{portfolioId}")
     public ResponseEntity<Portfolio> getPortfolio(@PathVariable long portfolioId) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Portfolio> portfolio = portfolioService.findPortfolioById(portfolioId);
+        if (portfolio.isPresent()) {
+            return ResponseEntity.ok(portfolio.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

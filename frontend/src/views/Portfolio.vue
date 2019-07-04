@@ -1,40 +1,18 @@
 <template>
     <div class="portfolio container">
         <h1>Portfolio</h1>
-        <div class="row">
-            <div class="col">
-                <b-form-select v-model="selectedPortfolioId">
-                    <option v-for="(name,id) in portfolios"></option>
-                </b-form-select>
-            </div>
-        </div>
+        <PortfolioCreation/>
+        <PortfolioSelection/>
     </div>
 </template>
 
 <script>
+    import PortfolioCreation from "@/components/PortfolioCreation";
+    import PortfolioSelection from "@/components/PortfolioSelection";
+
     export default {
         name: "Portfolio",
-        data() {
-            return {
-                selectedPortfolioId: null,
-                portfolios: []
-            }
-        },
-        mounted() {
-            this.fetchPortfolios();
-        },
-        methods: {
-            async fetchPortfolios() {
-                try {
-                    const response = await this.$http.get('http://localhost:8081/portfolio-service/portfolios/');
-                    if (response.status === 200) {
-                        this.portfolios = response.data;
-                    }
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-        }
+        components: {PortfolioCreation, PortfolioSelection},
     }
 </script>
 
