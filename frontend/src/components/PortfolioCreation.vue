@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col">
-                <input v-model="portfolioName">
-                <button @click="createPortfolio" class="btn btn-primary" type="button">Create</button>
+        <div class="input-group mb-3">
+            <input class="form-control" placeholder="Portofolio name" type="text" v-model="portfolioName">
+            <div class="input-group-append">
+                <button @click="createPortfolio" class="btn btn-primary btn-sm" type="button">Create</button>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-3">
             <div class="col">
                 <div class="alert-success" v-show="showSuccessfulCreation">Portfolio Created!</div>
             </div>
