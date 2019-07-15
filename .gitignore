@@ -30,3 +30,6 @@ target/
 *.iws
 *.ipr
 .idea/
+
+#Generated files
+sam-packaged.yaml

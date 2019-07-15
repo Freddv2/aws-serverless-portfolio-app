@@ -1,0 +1,3 @@
+aws s3 mb s3://dv2-serverless
+sam package --template-file ./sam.yml --s3-bucket dv2-serverless --output-template-file ./sam-packaged.yaml
+sam deploy --template-file ./sam-template-packaged.yaml --stack-name stock-app-dev --region ca-central-1 --capabilities CAPABILITY_IAM
