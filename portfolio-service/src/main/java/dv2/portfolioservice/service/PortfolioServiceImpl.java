@@ -29,7 +29,7 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public Portfolio createPortfolio(String portfolioName) {
-        Portfolio portfolio = new Portfolio(portfolioName);
+        Portfolio portfolio = new Portfolio();
         portfolioRepository.save(portfolio);
 
         return portfolio;

@@ -1,11 +1,26 @@
 package dv2.portfolioservice.domain;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import javax.persistence.*;
 
-@DynamoDBDocument
+@Entity
+@Table(name = "stock")
 public class Stock {
 
+    @Id
+    @GeneratedValue
+    private long id;
+
+    @Column(name = "symbol")
     private String symbol;
+
+    public long getId() {
+        return id;
+    }
+
+    public Stock setId(long id) {
+        this.id = id;
+        return this;
+    }
 
     public String getSymbol() {
         return symbol;

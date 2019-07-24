@@ -1,9 +1,7 @@
-package com.dv2.stockservice.filter;
-
+package dv2.portfolioservice.filter;
 
 import com.amazonaws.serverless.proxy.RequestReader;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequestContext;
-import com.dv2.stockservice.StreamLambdaHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +12,7 @@ import java.io.IOException;
 /**
  * Simple Filter implementation that looks for a Cognito identity id in the API Gateway request context
  * and stores the value in a request attribute. The filter is registered with aws-serverless-java-container
- * in the onStartup method from the {@link StreamLambdaHandler} class.
+ * in the onStartup method from the {@link com.amazonaws.serverless.sample.springboot2.StreamLambdaHandler} class.
  */
 public class CognitoIdentityFilter implements Filter {
     public static final String COGNITO_IDENTITY_ATTRIBUTE = "com.amazonaws.serverless.cognitoId";

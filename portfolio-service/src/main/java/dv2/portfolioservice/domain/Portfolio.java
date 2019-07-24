@@ -1,21 +1,21 @@
 package dv2.portfolioservice.domain;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
-
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@DynamoDBTable(tableName = "Portfolio")
+@Entity
+@Table(name = "portfolio")
 public class Portfolio {
 
-    @DynamoDBHashKey
-    @DynamoDBGeneratedUuid(DynamoDBAutoGenerateStrategy.CREATE)
-    private String id;
+    @Id
+    @GeneratedValue
+    private long id;
 
-    @DynamoDBAttribute
+    @Column(name = "portfolio")
     private String name;
 
-    @DynamoDBAttribute
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stock> stocks = new ArrayList<>();
 
     public Portfolio() {
@@ -25,11 +25,11 @@ public class Portfolio {
         this.name = name;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public Portfolio setId(String id) {
+    public Portfolio setId(long id) {
         this.id = id;
         return this;
     }

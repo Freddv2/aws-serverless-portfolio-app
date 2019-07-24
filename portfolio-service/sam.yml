@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  PortfolioFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/portfolio-service-0.0.1-SNAPSHOT-lambda.zip
+      Handler: dv2.portfolioservice.StreamLambdaHandler::handleRequest
+      Runtime: java8
+      MemorySize: 1512
+      Timeout: 15
+      Policies: AWSLambdaBasicExecutionRole
+      Events:
+        PortfolioRequest:
+          Type: Api
+          Properties:
+            Path: /portfolios/{proxy+}
+            Method: any
+Outputs:
+  ApiURL:
+    Description: "API endpoint URL for Dev environment"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/dev/portfolios/"
+    Export:
+      Name: PortfolioAPI

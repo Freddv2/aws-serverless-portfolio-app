@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/portfolio-service")
-@CrossOrigin(origins = "http://localhost")
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
@@ -21,17 +19,17 @@ public class PortfolioController {
         this.portfolioService = portfolioService;
     }
 
-    @PostMapping("/portfolios")
+    @PostMapping
     public Portfolio createPortfolio(@RequestBody ObjectNode requestBody) {
         return portfolioService.createPortfolio(requestBody.get("portfolioName").asText());
     }
 
-    @GetMapping("/portfolios")
+    @GetMapping
     public Iterable<Portfolio> listPortfolios() {
         return portfolioService.listPortfolios();
     }
 
-    @GetMapping("/portfolios/{portfolioId}")
+    @GetMapping("/{portfolioId}")
     public ResponseEntity<Portfolio> getPortfolio(@PathVariable long portfolioId) {
         Optional<Portfolio> portfolio = portfolioService.findPortfolioById(portfolioId);
         if (portfolio.isPresent()) {
