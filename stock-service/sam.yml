@@ -4,10 +4,10 @@ Resources:
   StockFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: target/stock-service-0.0.1-SNAPSHOT-lambda.zip
+      CodeUri: target/stock-service-0.0.1-SNAPSHOT-lambda-package.zip
       Handler: com.dv2.stockservice.StreamLambdaHandler::handleRequest
       Runtime: java8
-      MemorySize: 1512
+      MemorySize: 512
       Timeout: 15
       Policies: AWSLambdaBasicExecutionRole
       Events:

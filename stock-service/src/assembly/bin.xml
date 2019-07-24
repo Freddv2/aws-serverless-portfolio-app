@@ -1,7 +1,7 @@
 <assembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
           xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
-    <id>lambda</id>
+    <id>lambda-package</id>
     <formats>
         <format>zip</format>
     </formats>
@@ -10,10 +10,15 @@
         <!-- copy runtime dependencies with some exclusions -->
         <fileSet>
             <directory>${project.build.directory}${file.separator}lib</directory>
-            <outputDirectory>lib</outputDirectory>
             <excludes>
-                <exclude>tomcat-embed*</exclude>
+                <exclude>websocket*</exclude>
+                <exclude>jetty-http*</exclude>
+                <exclude>jetty-client*</exclude>
+                <exclude>jetty-webapp*</exclude>
+                <exclude>jetty-xml*</exclude>
+                <exclude>jetty-io*</exclude>
             </excludes>
+            <outputDirectory>lib</outputDirectory>
         </fileSet>
         <!-- copy all classes -->
         <fileSet>
