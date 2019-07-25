@@ -3,7 +3,6 @@ package com.dv2.stockservice.controller;
 import com.dv2.stockservice.JsonTransformer;
 import com.dv2.stockservice.domain.Stock;
 import com.dv2.stockservice.service.StockService;
-import com.dv2.stockservice.service.StockServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -14,9 +13,13 @@ import static spark.Spark.get;
 public class StockController {
     private final static Logger LOGGER = LoggerFactory.getLogger(StockController.class);
 
-    private final static StockService stockService = new StockServiceImpl();
+    private final StockService stockService;
 
-    public static void defineResources() {
+    public StockController(StockService stockService) {
+        this.stockService = stockService;
+    }
+
+    public void defineResources() {
         before((request, response) -> {
             response.type("application/json");
             LOGGER.info(requestInfoToString(request));
