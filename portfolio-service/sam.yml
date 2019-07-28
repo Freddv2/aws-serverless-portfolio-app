@@ -4,7 +4,7 @@ Resources:
   PortfolioFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: target/portfolio-service-0.0.1-SNAPSHOT-lambda.zip
+      CodeUri: target/portfolio-service-0.0.1-SNAPSHOT-lambda-package.zip
       Handler: dv2.portfolioservice.StreamLambdaHandler::handleRequest
       Runtime: java8
       MemorySize: 1512
@@ -16,6 +16,20 @@ Resources:
           Properties:
             Path: /portfolios/{proxy+}
             Method: any
+  PortfolioTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Portfolio
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
 Outputs:
   ApiURL:
     Description: "API endpoint URL for Dev environment"

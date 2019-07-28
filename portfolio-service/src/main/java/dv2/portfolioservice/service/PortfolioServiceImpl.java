@@ -1,37 +1,38 @@
 package dv2.portfolioservice.service;
 
+import dv2.portfolioservice.controller.payload.PortfolioCreationRequest;
 import dv2.portfolioservice.domain.Portfolio;
 import dv2.portfolioservice.repository.PortfolioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
-@Service
 public class PortfolioServiceImpl implements PortfolioService {
 
     private PortfolioRepository portfolioRepository;
 
-    @Autowired
     public PortfolioServiceImpl(PortfolioRepository portfolioRepository) {
         this.portfolioRepository = portfolioRepository;
     }
 
     @Override
-    public Optional<Portfolio> findPortfolioById(long portfolioId) {
-        return portfolioRepository.findById(portfolioId);
+    public Optional<Portfolio> findPortfolioById(String portfolioId) {
+        return Optional.of(portfolioRepository.findById(portfolioId));
     }
 
     @Override
-    public Iterable<Portfolio> listPortfolios() {
+    public List<Portfolio> listPortfolios() {
         return portfolioRepository.findAll();
     }
 
     @Override
-    public Portfolio createPortfolio(String portfolioName) {
+    public String createPortfolio(PortfolioCreationRequest portfolioCreationRequest) {
+
         Portfolio portfolio = new Portfolio();
+        portfolio.setName(portfolioCreationRequest.getName());
+        portfolio.setSymbols(portfolioCreationRequest.getSymbols());
         portfolioRepository.save(portfolio);
 
-        return portfolio;
+        return portfolio.getId();
     }
 }
