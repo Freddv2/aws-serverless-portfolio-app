@@ -2,11 +2,18 @@ import cdk = require('@aws-cdk/core');
 import lambda = require('@aws-cdk/aws-lambda');
 import apigw = require('@aws-cdk/aws-apigateway');
 import dynamodb = require('@aws-cdk/aws-dynamodb');
-
+import {CognitoUserPool} from './cognito-user-pool';
+import {CognitoIdentityPool} from './cognito-identity-pool';
 
 export class InfrastructureStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
+
+        const cognitoUserPool = new CognitoUserPool(this, 'AppCognitoUserPool', {});
+        const cognitoIdentityPool = new CognitoIdentityPool(this, 'AppCognitoIdentityPool', {
+            userPool: cognitoUserPool.userPool,
+            userPoolClient: cognitoUserPool.userPoolClient
+        });
 
         //Stock Service
         const stockService = new lambda.Function(this, 'StockService', {
