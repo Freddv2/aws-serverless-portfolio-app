@@ -1,12 +1,17 @@
 import cdk = require('@aws-cdk/core');
-import cognito = require('@aws-cdk/aws-cognito');
-import {CfnUserPool, UserPool, UserPoolClient} from '@aws-cdk/aws-cognito';
+import {CfnUserPool, SignInType, UserPool, UserPoolAttribute, UserPoolClient} from '@aws-cdk/aws-cognito';
+import {Construct} from '@aws-cdk/core';
 
 export interface CognitoUserPoolProps {
 
 }
 
-export class CognitoUserPool extends cdk.Construct {
+/**
+ * User pool definition. A user pool contains the list
+ * of users the application
+ *
+ */
+export class CognitoUserPool extends Construct {
     readonly userPool: UserPool;
     readonly cfnUserPool: CfnUserPool;
     readonly userPoolClient: UserPoolClient;
@@ -15,15 +20,16 @@ export class CognitoUserPool extends cdk.Construct {
         super(scope, id);
 
         //Create User Pool
-        this.userPool = new cognito.UserPool(this, 'AppUserPool', {
-            signInType: cognito.SignInType.EMAIL,
+        this.userPool = new UserPool(this, 'CognitoUserPool', {
+            signInType: SignInType.EMAIL,
             autoVerifiedAttributes: [
-                cognito.UserPoolAttribute.EMAIL
+                UserPoolAttribute.EMAIL
             ]
         });
 
-        //Edit User pool with unsupported high level props
-        this.cfnUserPool = this.userPool.node.defaultChild as cognito.CfnUserPool;
+        //Edit User pool with level 1 construct because those props are currently
+        //not supported in the level 2.
+        this.cfnUserPool = this.userPool.node.defaultChild as CfnUserPool;
         this.cfnUserPool.policies = {
             passwordPolicy: {
                 minimumLength: 8,
@@ -34,11 +40,10 @@ export class CognitoUserPool extends cdk.Construct {
             }
         };
 
-        //Create App Client
-        this.userPoolClient = new cognito.UserPoolClient(this, 'AppUserPoolClient', {
+        //Create App Client. An app client is a client that a allow unauthenticated user to login & register 
+        this.userPoolClient = new UserPoolClient(this, 'CognitoUserPoolClient', {
             generateSecret: false,
-            userPool: this.userPool,
-            userPoolClientName: 'AppUserPoolClient'
+            userPool: this.userPool
         });
 
     }

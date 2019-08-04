@@ -1,26 +1,34 @@
-import cdk = require('@aws-cdk/core');
-import cognito = require('@aws-cdk/aws-cognito');
-import iam = require('@aws-cdk/aws-iam');
 import {Effect, FederatedPrincipal, PolicyStatement, Role} from '@aws-cdk/aws-iam';
-import {UserPool, UserPoolClient} from '@aws-cdk/aws-cognito';
+import {CfnIdentityPool, CfnIdentityPoolRoleAttachment, UserPool, UserPoolClient} from '@aws-cdk/aws-cognito';
+import {Construct} from '@aws-cdk/core';
 
 export interface CognitoIdentityPoolProps {
     readonly userPool: UserPool;
     readonly userPoolClient: UserPoolClient;
 }
 
-export class CognitoIdentityPool extends cdk.Construct {
+/**
+ * Identity pool definition. An identity pool contains
+ * the authorization of our users. Users are provided
+ * to the identity pool. The identity pool assign an
+ * identity to the user which allow the user to be
+ * authorized in our application
+ *
+ * https://serverless-stack.com/chapters/cognito-user-pool-vs-identity-pool.html
+ *
+ */
+export class CognitoIdentityPool extends Construct {
 
-    readonly identityPool: cognito.CfnIdentityPool;
+    readonly identityPool: CfnIdentityPool;
     readonly authenticatedRole: Role;
     readonly unauthenticatedRole: Role;
-    readonly defaultPolicy: cognito.CfnIdentityPoolRoleAttachment;
+    readonly defaultPolicy: CfnIdentityPoolRoleAttachment;
 
-    constructor(scope: cdk.Construct, id: string, props: CognitoIdentityPoolProps) {
+    constructor(scope: Construct, id: string, props: CognitoIdentityPoolProps) {
         super(scope, id);
 
-        //Create identity pool. An identity pool is required to authorize users from the user pool
-        this.identityPool = new cognito.CfnIdentityPool(this, 'AppIdentityPool', {
+        //Create identity pool
+        this.identityPool = new CfnIdentityPool(this, 'CognitoIdentityPool', {
             allowUnauthenticatedIdentities: false,
             cognitoIdentityProviders: [{
                 providerName: props.userPool.userPoolProviderName,
@@ -54,7 +62,7 @@ export class CognitoIdentityPool extends cdk.Construct {
             }, 'sts:AssumeRoleWithWebIdentity'),
         });
         this.authenticatedRole.addToPolicy(new PolicyStatement({
-            effect: iam.Effect.ALLOW,
+            effect: Effect.ALLOW,
             actions: [
                 'mobileanalytics:PutEvents',
                 'cognito-sync:*',
@@ -63,7 +71,7 @@ export class CognitoIdentityPool extends cdk.Construct {
             resources: ['*'],
         }));
 
-        this.defaultPolicy = new cognito.CfnIdentityPoolRoleAttachment(this, 'DefaultValid', {
+        this.defaultPolicy = new CfnIdentityPoolRoleAttachment(this, 'DefaultValid', {
             identityPoolId: this.identityPool.ref,
             roles: {
                 'unauthenticated': this.unauthenticatedRole.roleArn,
