@@ -21,7 +21,7 @@
         methods: {
             async fetchPortfolios() {
                 try {
-                    const response = await this.$http.get('http://localhost:8081/portfolio-service/portfolios/');
+                    const response = await this.$http.get('/portfolios');
                     if (response.status === 200) {
                         this.portfolios = response.data.map((port) => {
                             return {

@@ -34,7 +34,7 @@
         methods: {
             async fetchStock() {
                 try {
-                    const response = await this.$http.get('http://localhost:8080/stock-service/stocks/' + this.symbol);
+                    const response = await this.$http.get('/stock' + this.symbol);
                     if (response.status === 200) {
                         this.name = response.data.name;
                         this.price = response.data.price;

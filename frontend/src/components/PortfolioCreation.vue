@@ -27,7 +27,7 @@
             async createPortfolio() {
                 try {
                     this.showSuccessfulCreation = false;
-                    const response = await this.$http.post('http://localhost:8081/portfolio-service/portfolios', {portfolioName: this.portfolioName});
+                    const response = await this.$http.post('/portfolios', {portfolioName: this.portfolioName});
                     if (response.status === 200) {
                         this.showSuccessfulCreation = true
                     }
